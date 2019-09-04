@@ -80,9 +80,6 @@ class SudokuBoard:
 			
 			if allowed_symbols.shape[0] == 1:
 				self.board[row, col] = allowed_symbols[0]
-				self.get_square(row, col).update()
-				self.rows[row].update()
-				self.columns[col].update()	
 				at_least_one_found = True	
 
 		return at_least_one_found
@@ -113,10 +110,7 @@ class SudokuBoard:
 
 			if len(deductions) == 1:
 				self.board[row, col] = deductions.pop()
-				self.get_square(row, col).update()
-				self.rows[row].update()
-				self.columns[col].update()	
-				applied = True						
+				applied = True
 
 		return applied
 
@@ -161,6 +155,3 @@ class SudokuBoard:
 			raise ConsistencyError
 
 		self.board[key] = value
-		square.update()
-		self.rows[index_row].update()
-		self.columns[index_col].update()			

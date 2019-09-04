@@ -13,9 +13,8 @@ def _resolve(row):
 	else:
 		return resolver == row[SOLUTION_COL], row
 
-def from_csv_parallel(csv_filename, total_rows=10_000):
+def from_csv(csv_filename, total_rows=10_000):
 	import csv
-	from concurrent import futures
 	from tqdm import tqdm
 
 	chuck_tqdm = max(total_rows // 1000, 1)
@@ -23,20 +22,17 @@ def from_csv_parallel(csv_filename, total_rows=10_000):
 	error_rows = []
 	with open(csv_filename, 'r') as csvfile:
 		reader = csv.DictReader(csvfile)
-		with futures.ProcessPoolExecutor() as executor:
-			exec_map = executor.map(_resolve, reader)
+		with tqdm(total=total_rows, mininterval=5) as pbar:
+			for sudoku_line in reader:
+				correct, row = _resolve(sudoku_line)
+				counter += 1
+				if not correct:
+					error_rows.append(row)
 
-			with tqdm(total=total_rows, mininterval=5) as pbar:
-				for correct, row in exec_map:
-					counter += 1
-					if not correct:
-						error_rows.append(row)
-
-					if counter % chuck_tqdm == 0:
-						pbar.update(chuck_tqdm)
+				if counter % chuck_tqdm == 0:
+					pbar.update(chuck_tqdm)
 
 	return error_rows, counter
-
 
 if __name__ == '__main__':
 	import sys
@@ -46,7 +42,7 @@ if __name__ == '__main__':
 	start = time.time()
 
 	# args: filename, number of rows
-	errors, rows = from_csv_parallel(sys.argv[1], int(sys.argv[2]))
+	errors, rows = from_csv(sys.argv[1], int(sys.argv[2]))
 
 	end = time.time()
 	elaps = end - start

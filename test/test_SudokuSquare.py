@@ -32,10 +32,8 @@ def test_square_allowed_symbols(default_square, default_symbols):
 	board = square.board
 	assert check_symbols(default_symbols, [1, 2, 3, 4, 5, 6, 7, 8, 9], square.calculate_allowed_symbols())
 	board[0, 1] = 1
-	square.update()
 	assert check_symbols(default_symbols, [2, 3, 4, 5, 6, 7, 8, 9], square.calculate_allowed_symbols())
 	board[1, 1] = 2
-	square.update()
 	assert check_symbols(default_symbols, [3, 4, 5, 6, 7, 8, 9], square.calculate_allowed_symbols())
 
 def test_square_allowed_symbols_9(default_symbols):
