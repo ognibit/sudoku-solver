@@ -18,7 +18,11 @@ class SudokuLine:
 		return self.board[key]
 
 	def calculate_allowed_symbols(self):
-		"""TODO"""
+		"""Checks which symbol is 'free' for this line
+		Returns
+		=========
+		numpy.array of boolean. True is allowed
+		"""
 		if not self._up_to_date:
 			self.allowed = np.isin(self.symbols, self.board, invert=True)	
 			self._up_to_date = True
