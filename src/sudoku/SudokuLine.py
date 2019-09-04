@@ -7,9 +7,11 @@ class SudokuLine:
 		self.board = board
 		self.symbols = symbols
 		self.allowed = []
+		self._up_to_date = False
 
 	def __setitem__(self, key, value):
 		self.board[key] = value
+		self.update()
 
 	def __getitem__(self, key):
 		return self.board[key]
@@ -20,5 +22,11 @@ class SudokuLine:
 		=========
 		numpy.array of boolean. True is allowed
 		"""
-		self.allowed = np.isin(self.symbols, self.board, invert=True)	
-		return self.allowed	
+		if not self._up_to_date:
+			self.allowed = np.isin(self.symbols, self.board, invert=True)
+			self._up_to_date = True
+
+		return self.allowed
+
+	def update(self):
+		self._up_to_date = False

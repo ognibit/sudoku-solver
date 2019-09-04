@@ -8,6 +8,7 @@ class SudokuSquare:
 		self.symbols = symbols 
 		self.board = board
 		self.allowed = []
+		self._up_to_date = False
 
 	def calculate_allowed_symbols(self):
 		"""Checks which symbol is 'free' for this square
@@ -16,7 +17,14 @@ class SudokuSquare:
 		numpy.array of boolean. True is allowed
 		"""
 
-		flat = self.board.flatten()
-		# get the symbols not in use
-		self.allowed = np.isin(self.symbols, flat, invert=True)	
+		if not self._up_to_date:
+			# get the symbols in use
+			flat = self.board.flatten()
+			# get the symbols not in use
+			self.allowed = np.isin(self.symbols, flat, invert=True)
+			self._up_to_date = True
+
 		return self.allowed
+
+	def update(self):
+		self._up_to_date = False
