@@ -15,7 +15,7 @@ def from_string(input_str, dimension=3):
 	quiz = np.array(list(input_str), dtype=np.int32)
 	quiz = quiz.reshape( (9,9) )
 	sudoku_board = SudokuBoard(quiz, symbols, dimension)
-	return sudoku_board
+	return sudoku_board	
 
 class SudokuBoard:
 
